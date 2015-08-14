@@ -3,13 +3,17 @@ package pol.isaac.carcCalc;
 import java.awt.Container;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.RootPaneContainer;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import pol.isaac.carcCalc.data.Card;
 
 public class MainCardCalc{
 
@@ -23,10 +27,32 @@ public class MainCardCalc{
 	private JSONObject _json;
 	private Boarder _boarder;
 	
+	private ArrayList<Card> _cardBox;
+	
 	public MainCardCalc() {
+		getList();
 		getMyConfig();
+		initCards();
 		createPanel();
+		addCards();
 		
+		
+	}
+	
+	private void addCards(){
+		for (int i = 0; i < _cardBox.size(); i++) {
+//		_boarder.addCard(_cardBox.get(i));
+		}
+	}
+	
+	private void initCards(){
+		_cardBox = new ArrayList<Card>();
+		
+		JSONArray arr = _json.getJSONArray("cards");
+		for (int i = 0; i < arr.length(); i++) {
+			Card card = new Card( arr.getJSONObject(i));
+			_cardBox.add(card);
+		}
 	}
 	
 	private void createPanel()
@@ -60,6 +86,12 @@ public class MainCardCalc{
 		{
 			_json = new JSONObject(str);
 		}
+	}
+	
+	private void getList()
+	{
+		TreeBuilder builder = new TreeBuilder();
+		builder.calc(true);
 	}
 	
 	
